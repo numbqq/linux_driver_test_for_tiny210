@@ -30,20 +30,18 @@ MODULE_PARM_DESC(major, "Major device number");
 
 
 static struct class *tiny210_leds_class;
-static struct class_device *tiny210_leds_class_dev; 
+static struct device *tiny210_leds_class_dev; 
 
 //GPJ2_0/1/2/3为LED引脚
 
-#define GPJ2CON		((volatile unsigned long *)0xE0200280)
-#define GPJ2DAT		((volatile unsigned long *)0xE0200284)
+#define GPJ2CON		0xE0200280
+#define GPJ2DAT		0xE0200284
 
 //对应虚拟地址
 static volatile unsigned long *gpj2con_va, *gpj2dat_va;
 
 static int tiny210_leds_open(struct inode *inode, struct file *file)
 {
-	unsigned m = iminor(inode);
-
 	//配置为输出
 	*gpj2con_va &= ~((0xf << 0) | (0xf << 4) | (0xf << 8) | (0xf << 12));
 	*gpj2con_va |= (1 << 0) | (1 << 4) | (1 << 8) | (1 << 12);
@@ -59,7 +57,8 @@ static ssize_t tiny210_leds_write(struct file *file, const char __user *buf, siz
 
 	printk("tiny210-leds: write!\n");
 
-	copy_from_user(&val, buf, count);
+	if (copy_from_user(&val, buf, count))
+		return -EFAULT;
 
 	if (val){
 		//on

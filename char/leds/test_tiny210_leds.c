@@ -21,14 +21,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	fd = open("/dev/nick_leds", O_RDWR);
-
-	if (fd < 0) 
-	{
-		printf("can't open!\n");	
-	}
-
-	if (0 == strcmp(argv[1], "on"))
+	if (0 == strcmp(argv[1], "on"))       
 	{
 		val = 1;
 	}
@@ -39,9 +32,20 @@ int main(int argc, char **argv)
 	else
 	{
 		usage(argv[0]);
+
+		return 0;
+	}
+
+	fd = open("/dev/nick_leds", O_RDWR);
+
+	if (fd < 0) 
+	{
+		printf("can't open!\n");	
 	}
 
 	write(fd, &val, 4);
+
+	close(fd);
 
 	return 0;
 }
