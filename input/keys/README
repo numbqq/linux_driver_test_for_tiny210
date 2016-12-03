@@ -1,0 +1,13 @@
+input子系统按键驱动程序
+
+1、把按键当做输入设备注册
+2、采用中断检测按键
+3、使用定时器消抖
+4、8个按键分别映射为l，s，left shitf，enter，left ctrl，c，esc，backspace
+
+
+如何测试：
+
+exec 0</dev/tty1
+
+把tty1重定向到标准输出，这样按下按键时就会显示相应的键值
