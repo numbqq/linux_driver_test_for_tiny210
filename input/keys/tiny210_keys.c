@@ -59,7 +59,7 @@ static void tiny210_keys_timer_handler(unsigned long data)
 	} else {
 		input_event(keys_dev, EV_KEY, key->key_value, 1);
 		input_sync(keys_dev);
-	}		       
+	}	
 }
 
 static irqreturn_t tiny210_keys_isr(int irq, void *dev_id)
@@ -99,15 +99,7 @@ static int __init tiny210_keys_init(void)
 	set_bit(KEY_ESC, keys_dev->keybit);
 	set_bit(KEY_BACKSPACE, keys_dev->keybit);
 
-	//3.注册
-	error = input_register_device(keys_dev);
-	if (error) {
-		printk("Unable to register input device, error: %d\n", error);
-
-		goto free_input_device;
-	}
-	
-	//4.硬件相关代码，如注册中断等
+	//3.硬件相关代码，如注册中断等
 	for (i=0; i<ARRAY_SIZE(keys); i++) {
 		if (!keys[i].pin)
 			continue;
@@ -142,6 +134,15 @@ static int __init tiny210_keys_init(void)
 	init_timer(&keys_timer);
 	keys_timer.function = tiny210_keys_timer_handler;
 	add_timer(&keys_timer);
+
+	//4.注册                                                          
+	error = input_register_device(keys_dev);
+	if (error) {
+	    printk("Unable to register input device, error: %d\n", error);
+	
+	    goto free_input_device;
+	}
+	        
 
 	return 0;
 
