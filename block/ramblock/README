@@ -1,0 +1,17 @@
+linux 块设备驱动程序
+
+使用ram模拟块设备
+
+在开发板上:
+1. insmod ramblock.ko
+2. 格式化: mkdosfs /dev/ramblock
+3. 挂接: mount /dev/ramblock /tmp/
+4. 读写文件: cd /tmp, 在里面vi文件
+5. cd /; umount /tmp/
+6. cat /dev/ramblock > /mnt/ramblock.bin
+7. 在PC上查看ramblock.bin
+   sudo mount -o loop ramblock.bin /mnt
+
+8. ls /dev/ramblock*
+9. fdisk /dev/ramblock    分区
+
