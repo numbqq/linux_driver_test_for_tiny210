@@ -1,0 +1,7 @@
+linux nand flash MTD驱动
+
+如何测试:
+1. 把kernel默认带的nand flash驱动拿掉
+2. 使用nfs挂载根文件系统
+3. 安装模块：insmod s5p_nand.ko 可以看到厂商信息以及分区信息
+
