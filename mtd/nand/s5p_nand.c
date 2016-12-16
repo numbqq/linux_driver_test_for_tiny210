@@ -192,16 +192,18 @@ static int __init s5p_nand_init(void)
 	clk_enable(clk);
 
 #define TACLS    1
-#define TWRPH0   2
+#define TWRPH0   4	//稍微设大点，根据s5pv210手册Note: You should add additional cycles about 10ns for page read
+					//because of additional signal delay on PCB pattern.
 #define TWRPH1   1
 	//K9K8G08U0B
-	//HCLK=200MHz ==> 5ns
+	//nandflash控制器时钟为HCLK_PSYS
+	//HCLK_PSYS=133MHz ==> 7.5ns
 	//Duration = HCLK x TACLS >  (tCLS - tWP) = (12ns - 12ns) = 0 ==> TACLS > 0
-	//Duration = HCLK x ( TWRPH0 + 1 ) > tWP = 12ns ==> TWRPH0 + 1 > 2.4 ==> TWRPH0 > 1.4
+	//Duration = HCLK x ( TWRPH0 + 1 ) > tWP = 12ns ==> TWRPH0 + 1 > 1.6 ==> TWRPH0 > 0.6
 	//Duration = HCLK x ( TWRPH1 + 1 ) > tCLH = 5ns ==> TWRPH1 > 0
 	s5p_nand_regs->nfconf = (TACLS << 12) | (TWRPH0 << 8) | (TWRPH1 << 4);
 
-	//取消片选，是能控制器
+	//取消片选，使能控制器
 	s5p_nand_regs->nfcont = (1 << 1) | (1 << 0);
 
 	// 4. 使用nand_scan
