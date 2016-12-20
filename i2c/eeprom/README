@@ -1,0 +1,12 @@
+linux EEPROM驱动
+
+1、i2c_new_device文件夹下驱动为直接用i2c_new_device创建i2c_client设备
+2、i2c_register_board_info文件夹下为通过i2c_register_board_info静态创建设备，在board文件调用
+
+测试程序
+test_at24cxx
+
+测试
+对于1、，测试时要把board文件中注册i2c_board_info相关部分屏蔽掉
+对于2、，要在board文件中定义相关的i2c_board_info结构
+
